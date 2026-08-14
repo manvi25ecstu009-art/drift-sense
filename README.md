@@ -76,6 +76,8 @@ Reference Image + Search Image
      Localization Error
 pip install -r requirements.txt
 
+```text
+git clone https://github.com/manvi25ecstu009-art/drift-sense.git
 # Repository Structure
 drift-sense/
 │
@@ -105,7 +107,7 @@ requirements.txt
 
 # Installation
 Clone the repository:
-git clone <REPOSITORY_URL>
+git clone https://github.com/manvi25ecstu009-art/drift-sense.git
 cd drift-sense
 Install the required packages:
 pip install -r requirements.txt
