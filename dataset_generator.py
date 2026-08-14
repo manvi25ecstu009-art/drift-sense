@@ -2,6 +2,7 @@ import os
 import cv2
 import csv
 import random
+import argparse
 import numpy as np
 
 
@@ -9,12 +10,41 @@ import numpy as np
 # DRIFT-SENSE HARD DATASET GENERATOR
 # ============================================================
 
-NUM_PAIRS = 30
+# Command-line configuration
+# Defaults preserve the original 30-pair DRAM + FinFET dataset behavior.
+parser = argparse.ArgumentParser(
+    description="Generate DRIFT-SENSE synthetic semiconductor localization image pairs."
+)
+parser.add_argument(
+    "--architecture",
+    choices=["DRAM", "FinFET", "BOTH"],
+    default="BOTH",
+    help="Architecture style to generate: DRAM, FinFET, or BOTH (default: BOTH)."
+)
+parser.add_argument(
+    "--pairs",
+    type=int,
+    default=30,
+    help="Number of image pairs to generate (default: 30)."
+)
+parser.add_argument(
+    "--output",
+    default="dataset",
+    help="Output directory for reference, search, previews and ground truth (default: dataset)."
+)
+
+args = parser.parse_args()
+
+if args.pairs <= 0:
+    parser.error("--pairs must be greater than 0")
+
+NUM_PAIRS = args.pairs
+ARCHITECTURE_STYLE = args.architecture
 
 IMAGE_SIZE = 1000
 REFERENCE_SIZE = 100
 
-DATASET_DIR = "dataset"
+DATASET_DIR = args.output
 
 REFERENCE_DIR = os.path.join(
     DATASET_DIR,
@@ -1187,16 +1217,19 @@ for image_id in range(
     )
 
     # --------------------------------------------------------
-    # Alternate architectures
+    # Select architecture
     # --------------------------------------------------------
+    # BOTH preserves the original alternating DRAM/FinFET behavior.
+    if ARCHITECTURE_STYLE == "BOTH":
 
-    if image_id % 2 == 0:
-
-        architecture = "FinFET"
+        if image_id % 2 == 0:
+            architecture = "FinFET"
+        else:
+            architecture = "DRAM"
 
     else:
 
-        architecture = "DRAM"
+        architecture = ARCHITECTURE_STYLE
 
     # --------------------------------------------------------
     # Difficulty distribution
@@ -1396,7 +1429,10 @@ print(
 
 print()
 print("Architecture:")
-print("DRAM + FinFET")
+if ARCHITECTURE_STYLE == "BOTH":
+    print("DRAM + FinFET")
+else:
+    print(ARCHITECTURE_STYLE)
 
 print()
 print("Difficulty:")
