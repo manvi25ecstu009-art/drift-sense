@@ -74,10 +74,8 @@ Reference Image + Search Image
             |
             v
      Localization Error
-pip install -r requirements.txt
-
+```
 ```text
-git clone https://github.com/manvi25ecstu009-art/drift-sense.git
 # Repository Structure
 drift-sense/
 │
